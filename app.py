@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Hello World!!!"
+    return "This is V2.0 of my web app!"
 
 
 
