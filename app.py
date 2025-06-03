@@ -7,7 +7,7 @@ env_config = os.getenv('APP_SETTINGS', 'config.DevelopmentConfig')
 app.config.from_object(env_config)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
 
 
 def retrieve_ticker_bid(ticker: str) -> float:

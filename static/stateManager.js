@@ -83,3 +83,11 @@ amountInput.addEventListener("keypress", (event) => {
         performConversion();
     }
 });
+
+// Handle virtual keyboard submission
+amountInput.addEventListener("input", (event) => {
+    if (event.inputType === "insertLineBreak") {
+        event.preventDefault();
+        performConversion();
+    }
+});
