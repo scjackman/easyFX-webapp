@@ -39,13 +39,19 @@
                 <input type="number" class="form-control form-control-lg" id="amount-input" placeholder="Enter amount" min="0" step="any">
             </div>
 
+            <!-- Tax toggle -->
+                <div class="form-check form-switch mb-3 d-flex justify-content-center">
+                    <input class="form-check-input me-3" type="checkbox" id="tax-toggle" style="transform: scale(1.5);">
+                    <label class="form-check-label" for="tax-toggle">Add 12% Tax?</label>
+                </div>
+
             <!-- Convert button -->
             <div class="d-grid mb-3">
                 <button id="convert-btn" class="btn btn-primary btn-lg">Convert</button>
             </div>
 
             <!-- Result -->
-            <div id="result" class="text-center fs-5 fw-semibold text-success"></div>
+            <div id="result" class="text-center fs-5 fw-semibold text-success" style="min-height: 3em; display: flex; align-items: center; justify-content: center;"></div>
         </div>
     </div>
 

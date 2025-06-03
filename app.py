@@ -6,6 +6,10 @@ app = Flask(__name__)
 env_config = os.getenv('APP_SETTINGS', 'config.DevelopmentConfig')
 app.config.from_object(env_config)
 
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
 def retrieve_ticker_bid(ticker: str) -> float:
     # Retrieve live bid info from the Yahoo Finance ticker passed to the function
     try:
@@ -16,7 +20,6 @@ def retrieve_ticker_bid(ticker: str) -> float:
 
     # Obtain ticker 'bid' info from data, and return
     return ticker_response.info['bid']
-
 
 @app.route('/')
 def index():
@@ -29,8 +32,12 @@ def convert_value():
     amount = float(data['amount'])
     from_currency = data['from']
     to_currency = data['to']
+    add_tax = data['add_tax']
+    print(add_tax)
+
+    tax = 1.12 if add_tax else 1.0
 
     ticker = from_currency + to_currency + '=X'
-    converted_amount  = amount * retrieve_ticker_bid(ticker)
+    converted_amount  = amount * retrieve_ticker_bid(ticker) * tax
 
     return jsonify({'converted_amount': converted_amount})

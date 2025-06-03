@@ -5,22 +5,24 @@ let toCurrency = "GBP";
 const swapBtn = document.getElementById("swap-btn");
 const convertBtn = document.getElementById("convert-btn");
 const amountInput = document.getElementById("amount-input");
-const resultEl = document.getElementById("result");
+const resultText = document.getElementById("result");
+const taxToggle = document.getElementById('tax-toggle');
 
 // Handle currency swap
 swapBtn.addEventListener("click", () => {
     [fromCurrency, toCurrency] = [toCurrency, fromCurrency];
     swapBtn.textContent = fromCurrency == "CAD" ? "->" : "<-";
-    resultEl.textContent = "";  // clear result on swap
+    resultText.textContent = "";  // clear result on swap
 });
 
 // Handle conversion
 convertBtn.addEventListener("click", async () => {
     const amount = parseFloat(amountInput.value);
+    const addTax = taxToggle.checked
     if (isNaN(amount) || amount <= 0) {
-        resultEl.textContent = "Please enter a valid amount.";
-        resultEl.classList.remove("text-success");
-        resultEl.classList.add("text-danger");
+        resultText.textContent = "Please enter a valid amount.";
+        resultText.classList.remove("text-success");
+        resultText.classList.add("text-danger");
         return;
     }
 
@@ -34,7 +36,8 @@ convertBtn.addEventListener("click", async () => {
             body: JSON.stringify({
                 amount: amount,
                 from: fromCurrency,
-                to: toCurrency
+                to: toCurrency,
+                add_tax: addTax
             })
         });
 
@@ -45,12 +48,13 @@ convertBtn.addEventListener("click", async () => {
         const data = await response.json();
         const convertedAmount = data.converted_amount;
 
-        resultEl.textContent = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
-        resultEl.classList.remove("text-danger");
-        resultEl.classList.add("text-success");
+        resultText.textContent = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        resultText.classList.remove("text-danger");
+        resultText.classList.add("text-success");
+
     } catch (error) {
-        resultEl.textContent = "Error converting currency.";
-        resultEl.classList.remove("text-success");
-        resultEl.classList.add("text-danger");
+        resultText.textContent = "Error converting currency.";
+        resultText.classList.remove("text-success");
+        resultText.classList.add("text-danger");
     }
 });
