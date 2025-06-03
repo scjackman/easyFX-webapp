@@ -7,6 +7,8 @@ const convertBtn = document.getElementById("convert-btn");
 const amountInput = document.getElementById("amount-input");
 const resultText = document.getElementById("result");
 const taxToggle = document.getElementById('tax-toggle');
+const spinner = convertBtn.querySelector('.spinner-border');
+const buttonText = convertBtn.querySelector('.button-text');
 
 // Handle currency swap
 swapBtn.addEventListener("click", () => {
@@ -15,16 +17,26 @@ swapBtn.addEventListener("click", () => {
     resultText.textContent = "";  // clear result on swap
 });
 
-// Handle conversion
-convertBtn.addEventListener("click", async () => {
+// Function to set loading state
+function setLoading(isLoading) {
+    convertBtn.disabled = isLoading;
+    spinner.classList.toggle('d-none', !isLoading);
+    buttonText.textContent = isLoading ? 'Converting...' : 'Convert';
+}
+
+// Function to perform conversion
+async function performConversion() {
     const amount = parseFloat(amountInput.value);
-    const addTax = taxToggle.checked
+    const addTax = taxToggle.checked;
+    
     if (isNaN(amount) || amount <= 0) {
         resultText.textContent = "Please enter a valid amount.";
         resultText.classList.remove("text-success");
         resultText.classList.add("text-danger");
         return;
     }
+
+    setLoading(true);
 
     // Send POST request to Flask
     try {
@@ -56,5 +68,18 @@ convertBtn.addEventListener("click", async () => {
         resultText.textContent = "Error converting currency.";
         resultText.classList.remove("text-success");
         resultText.classList.add("text-danger");
+    } finally {
+        setLoading(false);
+    }
+}
+
+// Handle conversion button click
+convertBtn.addEventListener("click", performConversion);
+
+// Handle return key in input field
+amountInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        performConversion();
     }
 });
