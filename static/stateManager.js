@@ -1,7 +1,10 @@
-// Initial state
+// Currency conversion state management script
+
+// Initialize default currency conversion direction
 let fromCurrency = "CAD";
 let toCurrency = "GBP";
 
+// Cache DOM elements for better performance
 const swapBtn = document.getElementById("swap-btn");
 const convertBtn = document.getElementById("convert-btn");
 const amountInput = document.getElementById("amount-input");
@@ -10,25 +13,29 @@ const taxToggle = document.getElementById('tax-toggle');
 const spinner = convertBtn.querySelector('.spinner-border');
 const buttonText = convertBtn.querySelector('.button-text');
 
-// Handle currency swap
+// Event listener for currency swap button
+// Swaps the source and target currencies and updates the UI accordingly
 swapBtn.addEventListener("click", () => {
     [fromCurrency, toCurrency] = [toCurrency, fromCurrency];
     swapBtn.textContent = fromCurrency == "CAD" ? "->" : "<-";
     resultText.textContent = "";  // clear result on swap
 });
 
-// Function to set loading state
+
+// Updates the UI to show loading state during conversion
 function setLoading(isLoading) {
     convertBtn.disabled = isLoading;
     spinner.classList.toggle('d-none', !isLoading);
     buttonText.textContent = isLoading ? 'Converting...' : 'Convert';
 }
 
-// Function to perform conversion
+
+// Performs the currency conversion by sending a request to the Flask route /convert
 async function performConversion() {
     const amount = parseFloat(amountInput.value);
     const addTax = taxToggle.checked;
     
+    // Validate input amount
     if (isNaN(amount) || amount <= 0) {
         resultText.textContent = "Please enter a valid amount.";
         resultText.classList.remove("text-success");
@@ -38,7 +45,7 @@ async function performConversion() {
 
     setLoading(true);
 
-    // Send POST request to Flask
+    // Send POST request to Flask route /convert
     try {
         const response = await fetch("/convert", {
             method: "POST",
@@ -53,10 +60,12 @@ async function performConversion() {
             })
         });
 
+        // Throw an error if the conversion fails
         if (!response.ok) {
             throw new Error("Conversion failed.");
         }
 
+        // Process and display the conversion result
         const data = await response.json();
         const convertedAmount = data.converted_amount;
 
@@ -65,6 +74,7 @@ async function performConversion() {
         resultText.classList.add("text-success");
 
     } catch (error) {
+        // Handle and display any errors that occur during conversion
         resultText.textContent = "Error converting currency.";
         resultText.classList.remove("text-success");
         resultText.classList.add("text-danger");
@@ -73,10 +83,10 @@ async function performConversion() {
     }
 }
 
-// Handle conversion button click
+// Event listener for conversion button click
 convertBtn.addEventListener("click", performConversion);
 
-// Handle return key in input field
+// Event listener for Enter key in amount input field
 amountInput.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -84,7 +94,7 @@ amountInput.addEventListener("keypress", (event) => {
     }
 });
 
-// Handle virtual keyboard submission
+// Event listener for mobile keyboard submission
 amountInput.addEventListener("input", (event) => {
     if (event.inputType === "insertLineBreak") {
         event.preventDefault();
