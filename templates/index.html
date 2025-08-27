@@ -23,7 +23,7 @@
         border: none;
         cursor: pointer;
     }
-    /* Flag image styling with subtle shadow effect */
+    /* Flag image styling */
     .flag-img {
         width: 80px;
         height: 80px;
@@ -33,14 +33,14 @@
 </style>
 </head>
 <body class="bg-light">
-    <!-- Main container with centered content -->
+    <!-- Main container -->
     <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
-        <!-- Card container for the currency converter -->
+        <!-- Card container -->
         <div class="card p-4 shadow rounded" style="width: 100%; max-width: 400px;">
             <h4 class="text-center mb-4">EasyFX</h4>
 
             <!-- Currency selector section -->
-            <!-- Displays two flags with a swap button between them -->
+            <!-- Displays two flags with seperated by swap arrow -->
             <div class="d-flex justify-content-center align-items-center mb-5" style="flex-wrap: nowrap; min-width: 0;">
                 <img id="from-flag" src="/static/ca.svg" alt="Canadian Flag" class="flag-img" style="flex-shrink: 1;">
                 <button id="swap-btn" class="arrow-btn mx-3" style="display: inline-block; width: 3em; text-align: center; font-size: 1.5em; flex-shrink: 0; white-space: nowrap;">-></button>
@@ -54,14 +54,14 @@
             </div>
 
             <!-- Tax toggle section -->
-            <!-- Allows users to include/exclude Canadian sales tax in the conversion -->
+            <!-- Allows users to include PST/GST in the conversion -->
             <div class="form-check form-switch mb-3 d-flex justify-content-center">
                 <input class="form-check-input me-3" type="checkbox" id="tax-toggle" style="transform: scale(1.5);">
                 <label class="form-check-label" for="tax-toggle">Add 12% PST/GST?</label>
             </div>
 
             <!-- Convert button section -->
-            <!-- Includes a loading spinner that shows during conversion -->
+            <!-- Loading spinner shows during conversion -->
             <div class="d-grid mb-3">
                 <button id="convert-btn" class="btn btn-primary btn-lg">
                     <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Result display section -->
-            <!-- Shows the converted amount with appropriate styling and currency symbol-->
+            <!-- Shows the converted amount -->
             <div id="result" class="text-center fs-5 fw-semibold text-success" style="min-height: 3em; display: flex; align-items: center; justify-content: center;"></div>
         </div>
     </div>

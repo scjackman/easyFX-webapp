@@ -4,7 +4,7 @@
 let fromCurrency = "CAD";
 let toCurrency = "GBP";
 
-// Cache DOM elements for better performance
+// Cache DOM elements to interact with
 const swapBtn = document.getElementById("swap-btn");
 const convertBtn = document.getElementById("convert-btn");
 const amountInput = document.getElementById("amount-input");
@@ -60,15 +60,18 @@ async function performConversion() {
             })
         });
 
-        // Throw an error if the conversion fails
-        if (!response.ok) {
-            throw new Error("Conversion failed.");
-        }
-
         // Process and display the conversion result
         const data = await response.json();
-        const convertedAmount = data.converted_amount;
 
+        // Handle errors during server call or in the server response
+        if (!response.ok || data.error) {
+            resultText.textContent = data.error || "Error converting currency.";
+            resultText.classList.remove("text-success");
+            resultText.classList.add("text-danger");
+            return;
+        }
+
+        const convertedAmount = data.converted_amount;
         resultText.textContent = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
         resultText.classList.remove("text-danger");
         resultText.classList.add("text-success");
